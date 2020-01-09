@@ -1,0 +1,64 @@
+import org.jenkinsci.plugins.workflow.steps.FlowInterruptedException
+import com.cloudbees.groovy.cps.NonCPS
+
+envs = [
+    ['dev','awspdproject154','eu-west-1','testReady'],
+    ['test','awspdproject153','eu-west-1','stageReady'],
+    ['stg','awspdproject184','us-east-1','prodReady']
+]
+
+pipeline {
+    agent {
+    	label 'build'
+	}
+    options {
+        ansiColor('xterm')
+        withAWS(credentials:'AWSProject152')
+    }
+    environment {
+        orig_artifact_id = "NPIManager"
+        artifact_id = orig_artifact_id.toLowerCase()
+        orig_service_name = "EMN-${orig_artifact_id}-Service"
+        cluster_name = "EMN-Services-Cluster"
+        service_name = orig_service_name.toLowerCase()
+        aws_region = "eu-west-1"
+        aws_dev_account = "915304389502"
+        aws_test_account = "305789968014"
+        aws_stage_account = "129768049704"
+        ECR_image_name = '${aws_account}.dkr.ecr.${aws_region}.amazonaws.com/${service_name}'
+    }
+    stages {
+        stage ('Build') {
+            steps {
+                sh "docker build ."
+            }
+        }
+        stage ('Tests') {
+            steps {
+                sh "echo ..."
+            }
+        }
+        /* stage ('Publish') {
+            steps {
+                echo 'Publishing to S3 bucket...'
+                sh "aws s3 cp file.txt s3://my-bucket/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers full=emailaddress=user@example.com"
+                sh "\$(aws ecr get-login --no-include-email --region ${aws_region})"
+                sh "docker push ${ECR_image_name}:latest"
+            }
+        } */
+        /* stage ('Update AWS Service') {
+            steps {
+                echo 'Updating AWS Service...'
+                sh "aws ecs update-service --service ${orig_service_name} --task-definition EMN-${orig_artifact_id}-Task-Definition --cluster ${cluster_name} --force-new-deployment --region=${aws_region}"
+                sh "aws ecs wait services-stable --cluster ${cluster_name} --services ${orig_service_name} --region ${aws_region}"
+
+            }
+        } */
+    }
+    post {
+        always {
+            cleanWs()
+            //sh "docker rm -f ${service_name}:new"
+        }
+    }
+}

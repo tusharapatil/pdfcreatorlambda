@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/ReportPDFCreator/.vs/ReportPDFCreator/v15
+/src/.vs/ReportPDFCreator/v15
+/src/ReportPDFCreator/bin/Debug/netcoreapp2.1
+/src/ReportPDFCreator/obj
+/src/ReportPDFCreator.Tests/obj
+/src/.vs/ReportPDFCreator/DesignTimeBuild
+/src/ReportPDFCreator/bin/Release/netcoreapp2.1
+/src/ReportPDFCreator.Tests/bin/Debug/netcoreapp2.1
+/src/ReportPDFCreator/bin
